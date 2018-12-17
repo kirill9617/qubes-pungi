@@ -1,13 +1,11 @@
-From b6947894de2874b03467e02ae735ccef3ec554d3 Mon Sep 17 00:00:00 2001
+From a4dbfd7eb4e390a634c1505dad89cde593b0a640 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?=
  <marmarek@invisiblethingslab.com>
 Date: Tue, 29 Sep 2015 14:07:25 +0200
-Subject: [PATCH 2/2] Verify downloaded packages
+Subject: [PATCH] Verify downloaded packages
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Organization: Invisible Things Lab
-Cc: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
 
 Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
 ---
@@ -15,10 +13,10 @@ Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
  1 file changed, 14 insertions(+)
 
 diff --git a/pungi/gather.py b/pungi/gather.py
-index a5c9df9..66212d2 100644
+index 8b013f1..597df81 100644
 --- a/pungi/gather.py
 +++ b/pungi/gather.py
-@@ -1103,6 +1103,20 @@ class Pungi(PungiBase):
+@@ -1240,6 +1240,20 @@ class Pungi(PungiBase):
              sys.exit(1)
  
          for po in polist:
@@ -40,5 +38,5 @@ index a5c9df9..66212d2 100644
  
              local = po.localPkg()
 -- 
-2.1.0
+2.17.2
 

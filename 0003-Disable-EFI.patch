@@ -1,0 +1,31 @@
+From ff3be306caa9c48e253d019a70df19454113365e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?=
+ <marmarek@invisiblethingslab.com>
+Date: Sun, 30 Dec 2018 19:15:54 +0100
+Subject: [PATCH] Disable EFI
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+---
+ pungi/gather.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/pungi/gather.py b/pungi/gather.py
+index 597df81..423474e 100644
+--- a/pungi/gather.py
++++ b/pungi/gather.py
+@@ -1808,7 +1808,8 @@ class Pungi(PungiBase):
+ 
+         if self.tree_arch == 'i386' or self.tree_arch == 'x86_64':
+             extraargs.extend(x86bootargs)
+-            if self.tree_arch == 'x86_64':
++            if self.tree_arch == 'x86_64' and \
++                    os.path.exists(os.path.join(self.topdir, 'images', 'efiboot.img')):
+                 extraargs.extend(efibootargs)
+                 isohybrid.append('-u')
+                 if os.path.exists(os.path.join(self.topdir, 'images', 'macboot.img')):
+-- 
+2.17.2
+
