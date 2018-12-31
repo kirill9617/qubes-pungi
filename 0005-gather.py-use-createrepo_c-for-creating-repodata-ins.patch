@@ -1,0 +1,90 @@
+From d61894f13a54ec7573bc5ad4be2598b1843d58bb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Fr=C3=A9d=C3=A9ric=20Pierret=20=28fepitre=29?=
+ <frederic.epitre@orange.fr>
+Date: Sun, 30 Dec 2018 17:47:24 +0100
+Subject: [PATCH] gather.py: use createrepo_c for creating repodata instead of
+ obsolete createrepo python library
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fixes: https://pagure.io/pungi/issue/1094
+Signed-off-by: Frédéric Pierret (fepitre) <frederic.pierret@qubes-os.org>
+---
+ pungi/gather.py | 41 +++++++++++++++++++----------------------
+ 1 file changed, 19 insertions(+), 22 deletions(-)
+
+diff --git a/pungi/gather.py b/pungi/gather.py
+index 3ffc122..0a797af 100644
+--- a/pungi/gather.py
++++ b/pungi/gather.py
+@@ -22,7 +22,6 @@ import subprocess
+ import sys
+ from fnmatch import fnmatch
+ 
+-import createrepo
+ import lockfile
+ import urlgrabber.progress
+ import yum
+@@ -1426,39 +1425,37 @@ class Pungi(PungiBase):
+         basedir = os.path.join(self.destdir, self.config.get('pungi', 'version'))
+         if subfile.startswith(basedir):
+             return subfile.replace(basedir + os.path.sep, '')
+-        
++
+     def _makeMetadata(self, path, cachedir, comps=False, repoview=False, repoviewtitle=False,
+                       baseurl=False, output=False, basedir=False, update=True,
+                       compress_type=None):
+         """Create repodata and repoview."""
+-        
+-        conf = createrepo.MetaDataConfig()
+-        conf.cachedir = os.path.join(cachedir, 'createrepocache')
+-        conf.update = update
+-        conf.unique_md_filenames = True
++
++        cr = ['/usr/bin/createrepo_c']
++        cr.append('--unique-md-filenames')
++        if update:
++            cr.append('--update')
+         if output:
+-            conf.outputdir = output
++            outputdir = output
+         else:
+-            conf.outputdir = path
+-        conf.directory = path
+-        conf.database = True
++            outputdir = path
++        cr.append('--outputdir=' + outputdir)
++        cr.append('--database')
+         if comps:
+-            conf.groupfile = comps
++            cr.append('--groupfile=' + comps)
+         if basedir:
+-            conf.basedir = basedir
++            cr.append('--basedir=' + basedir)
+         if baseurl:
+-            conf.baseurl = baseurl
++            cr.append('--baseurl=' + baseurl)
+         if compress_type:
+-            conf.compress_type = compress_type
++            cr.append('--compress-type=' + compress_type)
+         if 'SOURCE_DATE_EPOCH' in os.environ:
+-            conf.revision = os.environ['SOURCE_DATE_EPOCH']
+-            conf.clamp_mtime_to = int(os.environ['SOURCE_DATE_EPOCH'])
+-        repomatic = createrepo.MetaDataGenerator(conf)
++            cr.append('--revision=' + os.environ['SOURCE_DATE_EPOCH'])
++        cr.append(path)
++
+         self.logger.info('Making repodata')
+-        repomatic.doPkgMetadata()
+-        repomatic.doRepoMetadata()
+-        repomatic.doFinalMove()
+-        
++        pungi.util._doRunCommand(cr, self.logger)
++
+         if repoview:
+             # setup the repoview call
+             repoview = ['/usr/bin/repoview']
+-- 
+2.17.2
+
