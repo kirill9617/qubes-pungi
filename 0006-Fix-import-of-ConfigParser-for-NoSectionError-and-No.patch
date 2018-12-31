@@ -1,0 +1,30 @@
+From 679cfb07cccf34d0cf999419b1caa04006710231 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Fr=C3=A9d=C3=A9ric=20Pierret=20=28fepitre=29?=
+ <frederic.pierret@qubes-os.org>
+Date: Mon, 31 Dec 2018 12:12:35 +0100
+Subject: [PATCH] Fix import of ConfigParser for NoSectionError and
+ NoOptionError
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Frédéric Pierret (fepitre) <frederic.pierret@qubes-os.org>
+---
+ pungi/gather.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/pungi/gather.py b/pungi/gather.py
+index 0a797af..53ccd3c 100644
+--- a/pungi/gather.py
++++ b/pungi/gather.py
+@@ -26,6 +26,7 @@ import lockfile
+ import urlgrabber.progress
+ import yum
+ from productmd.common import SortedConfigParser
++import ConfigParser
+ 
+ import arch as arch_module
+ import multilib_yum as multilib
+-- 
+2.17.2
+

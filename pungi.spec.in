@@ -13,6 +13,7 @@ Patch1: 0002-Verify-downloaded-packages.patch
 Patch2: 0003-Disable-EFI.patch
 Patch3: 0004-Hacky-way-to-pass-gpgkey-to-lorax.patch
 Patch4: 0005-gather.py-use-createrepo_c-for-creating-repodata-ins.patch
+Patch5: 0006-Fix-import-of-ConfigParser-for-NoSectionError-and-No.patch
 
 BuildRequires:  python3-nose
 BuildRequires:  python3-mock
