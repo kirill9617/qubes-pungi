@@ -36,11 +36,16 @@ BuildRequires:  python3-koji
 BuildRequires:  python3-unittest2
 BuildRequires:  lorax
 BuildRequires:  python3-PyYAML
-BuildRequires:  libmodulemd >= 1.3.0
+%if 0%{?fedora} <  30
+BuildRequires:  python3-libmodulemd
+%else
+BuildRequires:  python3-libmodulemd1
+%endif
 BuildRequires:  python3-gobject
 BuildRequires:  python3-pdc-client
 BuildRequires:  python3-createrepo_c
 BuildRequires:  python3-dogpile-cache
+BuildRequires:  python3-parameterized
 
 #deps for doc building
 BuildRequires:  python3-sphinx, texlive-collection-fontsrecommended
@@ -65,13 +70,18 @@ Requires:       isomd5sum
 Requires:       genisoimage
 Requires:       git
 Requires:       python3-jsonschema
+Requires:       libguestfs-tools-c
 Requires:       python3-enum34
 Requires:       python3-dnf
 Requires:       python3-multilib
 Requires:       python3-libcomps
 Requires:       python3-six
 Requires:       python3-koji
-Requires:       libmodulemd >= 1.3.0
+%if 0%{?fedora} <  30
+Requires:       python3-libmodulemd
+%else
+Requires:       python3-libmodulemd1
+%endif
 Requires:       python3-gobject
 Requires:       python3-pdc-client
 Requires:       python3-createrepo_c
@@ -192,6 +202,7 @@ nosetests-3 --exe
 %{_bindir}/%{name}-config-dump
 %{_bindir}/%{name}-config-validate
 %{_bindir}/%{name}-fedmsg-notification
+%{_bindir}/%{name}-orchestrate
 %{_bindir}/%{name}-patch-iso
 %{_bindir}/%{name}-compare-depsolving
 %{_bindir}/%{name}-wait-for-signed-ostree-handler
